@@ -1,0 +1,6 @@
+"rocketjump"
+{
+	"title"		"Rocket Jump"
+	"base"		"base"
+	"menusystem"	"1"
+}
