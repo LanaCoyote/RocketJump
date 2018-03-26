@@ -18,6 +18,14 @@ local NPC_Color = Color( 250, 50, 50, 255 );
 
 local Deaths = {};
 
+local function GetPlayerColor( playerName )
+	if not playerName then return Color( 255, 255, 90, 255 ) end;
+
+	for _, ply in pairs( player.GetAll() ) do
+		if ply:Name() == playerName then return ply:rj_GetPlayerColor() end;
+	end
+end
+
 function GM:AddDeathNotice( Attacker, team1, Inflictor, Victim, team2 )
 
 	local Death = {}
@@ -29,14 +37,12 @@ function GM:AddDeathNotice( Attacker, team1, Inflictor, Victim, team2 )
 
 	if team1 == -1 then Death.color1 = table.Copy( NPC_Color )
 	else 
-		Death.color1 = table.Copy( Attacker:rj_GetPlayerColor() );
+		Death.color1 = table.Copy( GetPlayerColor( Attacker ) );
 	end
 	
 	if team2 == -2 then Death.color1 = table.Copy( NPC_Color )
 	else 
-		local victimColor = GetPlayerColor( Victim );
-		if victimColor then victimColor = Vector( victimColor ):ToColor() end;
-		Death.color2 = table.Copy( Victim:rj_GetPlayerColor() );
+		Death.color2 = table.Copy( GetPlayerColor( Victim ) );
 	end
 	
 	if (Death.left == Death.right) then

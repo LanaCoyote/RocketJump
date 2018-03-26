@@ -88,18 +88,7 @@ util.AddNetworkString( "PlayerKilledByDirectHit" );
 function GM:DoPlayerDeath( ply, attacker, cTakeDamageInfo )
 
 	if ( cTakeDamageInfo:IsExplosionDamage() and ply:Health() < -15 ) then
-		for i = 1,8 do
-			local giblet = ents.Create( "rj_gib" );
-			giblet:SetPos( ply:GetShootPos() - Vector( 0, 0, i * 4 ) );
-
-			giblet:Spawn();
-
-			if player_manager.TranslateToPlayerModelName( ply:GetModel() ) == "skeleton" then
-				giblet:SetModel( "models/gibs/hgibs_scapula.mdl" );
-				giblet:SetModelScale( math.random() * 2 );
-				giblet:SetColor( Color( 255, 255, 255, 255 ) );
-			end	
-		end
+		ply:rj_Gib();
 	else
 		ply:CreateRagdoll();
 	end
