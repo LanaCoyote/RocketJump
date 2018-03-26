@@ -7,7 +7,7 @@ GM.TeamBased		= true;
 GM.TeamplayEnabled 	= false;
 
 function GM:StartCommand( ply, cmd )
-	if not ply:Team() == TEAM_SPECTATOR then
+	if ply:Team() != TEAM_SPECTATOR then
 		cmd:ClearMovement();
 		cmd:RemoveKey( IN_DUCK );
 		cmd:RemoveKey( IN_JUMP );
