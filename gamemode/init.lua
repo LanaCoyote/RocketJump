@@ -19,6 +19,10 @@ end
 function GM:Think()
 	if CurTime() > GAMEMODE.NextRemoveArmorTick then
 		for i, ply in pairs( GAMEMODE.SpawnProtectedPlayers ) do
+			if not IsValid( ply ) then
+				table.remove( GAMEMODE.SpawnProtectedPlayers, i );
+			continue end;
+
 			if ply:Armor() > 0 then ply:SetArmor( ply:Armor() - 2 );
 			else 
 				table.remove( GAMEMODE.SpawnProtectedPlayers, i );
@@ -31,10 +35,15 @@ function GM:Think()
 end
 
 function GM:PlayerSetModel( ply )
-	local cl_playermodel = ply:GetInfo( "cl_playermodel" )
-	local modelname = player_manager.TranslatePlayerModel( cl_playermodel )
-	util.PrecacheModel( modelname )
-	ply:SetModel( modelname )
+	if ply:IsBot() then
+		local randomModel = table.Random( player_manager.AllValidModels() );
+		ply:SetModel( randomModel );
+	else
+		local cl_playermodel = ply:GetInfo( "cl_playermodel" )
+		local modelname = player_manager.TranslatePlayerModel( cl_playermodel )
+		util.PrecacheModel( modelname )
+		ply:SetModel( modelname )
+	end
 
 	GAMEMODE:PlayerSetColor( ply );
 end
@@ -229,6 +238,31 @@ function GM:OnPlayerChangedTeam( ply, oldTeam, newTeam )
 end
 
 function GM:PlayerInitialSpawn( pl )
+	if pl:IsBot() then
+		pl:SetTeam( TEAM_DEATHMATCH or TEAM_RED );
+		pl:rj_SetPlayerColorVector( Vector( math.random(), math.random(), math.random() ) );
+	return end
+
 	pl:SetTeam( TEAM_UNASSIGNED )
 	pl:SetNWString( "ShowMenu", "welcome" );
+end
+
+function GM:OnPlayerHitGround( ply, inWater, onFloater, speed )
+	if not inWater then
+		local groundEnt = ply:GetGroundEntity();
+		if IsValid( groundEnt ) and groundEnt:IsPlayer() then
+			-- landed on player, goomba stomp!
+			local stompSpeed = math.max( speed, 300 );
+			ply:SetVelocity( Vector( 0, 0, stompSpeed ) );
+			if not groundEnt:OnGround() then groundEnt:SetVelocity( Vector( 0, 0, stompSpeed ) ) end;
+
+			local goombaStompDamage = DamageInfo();
+			goombaStompDamage:SetDamage( 25 );
+			goombaStompDamage:SetDamageType( DMG_CLUB );
+			goombaStompDamage:SetInflictor( ply );
+			goombaStompDamage:SetAttacker( ply );
+			groundEnt:TakeDamageInfo( goombaStompDamage );
+			EmitSound( "Flesh.ImpactHard", ply:GetPos() + Vector( 0, 512, 0 ), ply:EntIndex() );
+		end
+	end
 end

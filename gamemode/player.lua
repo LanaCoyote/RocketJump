@@ -27,6 +27,8 @@ function PlayerMeta:rj_SetPlayerColorVector( colorVec )
 end
 
 function PlayerMeta:rj_RefreshPlayerColor()
+	if self:IsBot() then return end;
+
 	local playerColor;
 	if SERVER then playerColor = self:GetInfo( "cl_playercolor" );
 	else playerColor = PlayerColorConvar and PlayerColorConvar:GetString() or Vector( 1, 1, 0 ); 

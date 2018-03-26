@@ -7,6 +7,8 @@ include( "shared.lua" );
 local CursorLockConvar = CreateClientConVar( "cl_cursorlock", 1, true, false, "Whether the cursor should be locked to the screen during gameplay" );
 local CrosshairCursorConvar = CreateClientConVar( "cl_crosshaircursor", 1, true, false, "Use the crosshair cursor instead of the default pointer" );
 
+util.PrecacheSound( "Flesh.ImpactHard" );
+
 function GM:Think() 
 	gui.EnableScreenClicker( true );
 	vgui.GetWorldPanel():SetWorldClicker( true );
