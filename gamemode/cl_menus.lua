@@ -171,15 +171,17 @@ function GM:DrawTeam()
 
 	if not panels["teamSelector"] then
 		local teamSelectorPanel = vgui.Create( "Panel" );
-		teamSelectorPanel:SetSize( columnWidth, 160 );
+		teamSelectorPanel:SetSize( columnWidth, 256 );
 		teamSelectorPanel:SetPos( printX, printY );
+
+		local teamButtonHeight = GAMEMODE.TeamplayEnabled and 96 or 192;
 
 		local scrWriteY = 0;
 
 		for k, v in pairs( team.GetAllTeams() ) do
 			if v.Joinable then
 				local teamButton = vgui.Create( "DColorButton", teamSelectorPanel );
-				teamButton:SetSize( columnWidth, 48 );
+				teamButton:SetSize( columnWidth, k == TEAM_SPECTATOR and 48 or teamButtonHeight );
 				teamButton:SetPos( 0, scrWriteY );
 				local teamButtonName = k == TEAM_SPECTATOR and "Spectate" or v.Name.." ("..team.NumPlayers( k )..")";
 				teamButton:SetText( teamButtonName );
