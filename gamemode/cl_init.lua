@@ -69,6 +69,18 @@ function GM:CalcView( ply, origin, angles, fov, znear, zfar )
 	view.zfar		= zfar;
 	view.drawviewer	= false;
 
+	if not ply:Alive() and ply:GetNWInt( "Killer" ) > 0 then
+		local killer = Entity( ply:GetNWInt( "Killer" ) );
+		if !IsValid( killer ) then return view end;
+
+		local viewPos = ply:GetPos() + viewAdjustmentVector;
+		viewPos.y = 600;
+
+		local viewAngleVector = killer:GetPos() - viewPos;
+		viewAngleVector:Rotate( Angle( 180, 180, 180 ) );
+		view.angles = viewAngleVector:Angle(); -- foams from mouth
+	end
+
 	return view;
 end
 

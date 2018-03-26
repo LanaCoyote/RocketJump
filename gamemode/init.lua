@@ -136,6 +136,8 @@ concommand.Add( "explode2", Explode )
 
 function GM:PlayerDeath( ply, inflictor, attacker )
 
+	ply:SetNWInt( "Killer", 0 );
+
 	if ( IsValid( attacker ) or attacker:GetClass() == "trigger_hurt" or attacker:GetClass() == "func_physbox" ) then 
 		attacker = IsValid( ply.LastAttackingPlayer ) and ply.LastAttackingPlayer or ply; 
 	end
@@ -167,6 +169,8 @@ function GM:PlayerDeath( ply, inflictor, attacker )
 	return end
 
 	if ( attacker:IsPlayer() ) then
+
+		ply:SetNWInt( "Killer", attacker:EntIndex() );
 
 		if ply.DirectHit then
 			net.Start( "PlayerKilledByDirectHit" );
