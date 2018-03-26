@@ -86,8 +86,7 @@ function GM:DrawScoreboard()
 	for idx, ply in ipairs( sortedPlayerList ) do
 		if ply:Team() > 1000 then continue end;
 
-		local playerColor = ply:GetNWString( "PlayerColor" );
-		if playerColor then playerColor = Vector( playerColor ):ToColor() else Color( 255, 205, 0, 255 ) end;
+		local playerColor = ply:rj_GetPlayerColor();
 		local totalLuminence = ( playerColor.r + playerColor.g + playerColor.b ) / ( 255 * 3 );
 
 		local textColor = Color( 0, 0, 0, 255 );

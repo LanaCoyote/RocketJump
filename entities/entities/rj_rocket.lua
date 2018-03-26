@@ -35,8 +35,7 @@ function ENT:Initialize()
 	end
 
 	-- self:SetParticleTrail( self.ParticleName );
-	local playerColor = self:GetOwner() and self:GetOwner():GetNWString( "PlayerColor" );
-	if playerColor then playerColor = Vector( playerColor ) end;
+	local playerColor = self:GetOwner() and self:GetOwner():rj_GetPlayerColorVector();
 
 	self.trailEffects = EffectData();
 	self.trailEffects:SetEntity( self );
@@ -111,8 +110,7 @@ function ENT:Explode( pos, normal, world )
 	-- explosion:Spawn();
 	-- explosion:Fire( "Explode" );
 
-	local playerColor = self:GetOwner() and self:GetOwner():GetNWString( "PlayerColor" );
-	if playerColor then playerColor = Vector( playerColor ) end;
+	local playerColor = self:GetOwner() and self:GetOwner():rj_GetPlayerColorVector();
 	local explosionData = EffectData();
 		explosionData:SetOrigin( pos );
 		explosionData:SetStart( playerColor );

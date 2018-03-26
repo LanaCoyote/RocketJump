@@ -107,12 +107,6 @@ local function ChangeModel( modelName )
 	LocalPlayer():ChatPrint( "Player model changed to "..modelName );
 end
 
-local function GetLocalPlayerColor()
-	local playerColor = LocalPlayer():GetNWString( "PlayerColor" );
-	if not playerColor then return end;
-	return Vector( playerColor ):ToColor();
-end
-
 function GM:DrawTeam()
 	local letterHeight = DimGameplay( 0.1 );
 	local marginWidth = ScrW() * 0.15;
@@ -233,7 +227,7 @@ function GM:DrawTeam()
 			colorSelectorPanel:SetPalette( true );
 			colorSelectorPanel:SetWangs( true ); -- lol
 			colorSelectorPanel:SetAlphaBar( false );
-			local pColor = GetLocalPlayerColor();
+			local pColor = LocalPlayer():rj_GetPlayerColor();
 			if pColor then colorSelectorPanel:SetColor( pColor ) end;
 
 			function colorSelectorPanel:ValueChanged( newCol )

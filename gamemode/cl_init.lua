@@ -1,6 +1,7 @@
 include( "cl_deathnotice.lua" );
 include( "cl_hud.lua" );
 
+include( "player.lua" );
 include( "shared.lua" );
 
 local CursorLockConvar = CreateClientConVar( "cl_cursorlock", 1, true, false, "Whether the cursor should be locked to the screen during gameplay" );
@@ -86,10 +87,7 @@ function GM:OnPlayerChat( player, strText, bTeamOnly, bPlayerIsDead )
 			table.insert( chatLine, "(TEAM) " );
 		end
 	elseif IsValid( player ) then	
-		local playerColor = player:GetNWString( "PlayerColor" );
-		if playerColor then
-			table.insert( chatLine, Vector( playerColor ):ToColor() );
-		end
+		table.insert( chatLine, player:rj_GetPlayerColor() );
 	end
 
 	if IsValid( player ) then

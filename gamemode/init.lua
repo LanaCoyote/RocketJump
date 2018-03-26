@@ -3,8 +3,10 @@ AddCSLuaFile( "cl_hud.lua" );
 AddCSLuaFile( "cl_init.lua" );
 AddCSLuaFile( "cl_menus.lua" );
 AddCSLuaFile( "cl_scoreboard.lua" );
+AddCSLuaFile( "player.lua" );
 AddCSLuaFile( "shared.lua" );
 
+include( "player.lua" );
 include( "shared.lua" );
 
 GM.SpawnProtectedPlayers = {};
@@ -34,13 +36,12 @@ function GM:PlayerSetModel( ply )
 	util.PrecacheModel( modelname )
 	ply:SetModel( modelname )
 
-	local playerColorString = ply:GetInfo( "cl_playercolor" );
-	if playerColorString then
-		ply:SetNWString( "PlayerColor", playerColorString );
-		local playerColorVector = Vector( playerColorString );
+	GAMEMODE:PlayerSetColor( ply );
+end
 
-		ply:SetPlayerColor( playerColorVector );
-	end
+function GM:PlayerSetColor( ply )
+	ply:rj_RefreshPlayerColor();
+	ply:SetPlayerColor( ply:rj_GetPlayerColorVector() );
 end
 
 function GM:PlayerLoadout( ply )

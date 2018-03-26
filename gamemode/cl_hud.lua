@@ -14,8 +14,6 @@ local PlaceholderColor = table.Random({
 	"155 255 0 255"
 });
 
-local PlayerColorConvar = CreateClientConVar( "cl_playercolor", tostring( Vector( 1, 1, 0 ) ), true, true, "Color of the player's choosing" );
-
 LocalPlayer().ShowMenu = nil;
 
 function GM:HUDShouldDraw( element )
@@ -24,12 +22,6 @@ function GM:HUDShouldDraw( element )
 end
 
 function GM:HUDPaint()
-
-	local playerColor = PlayerColorConvar and PlayerColorConvar:GetString() or PlaceholderColor;
-	if not self.PlayerColor or tostring( self.PlayerColor ) != playerColor then
-		self.PlayerColor = Vector( playerColor ):ToColor();
-		LocalPlayer():SetNWString( "PlayerColor", playerColor );
-	end
 
 	hook.Run( "HUDDrawPickupHistory" );
 	hook.Run( "DrawDeathNotice", 0.85, 0.04 );
@@ -47,7 +39,7 @@ end
 
 function GM:DrawLaserPointer()
 	if not IsValid( LocalPlayer():GetActiveWeapon() ) then return end;
-	local beamColor = self.PlayerColor;
+	local beamColor = LocalPlayer():rj_GetPlayerColor();
 	local beamLength = 150;
 
 	local pTraceData = util.GetPlayerTrace( LocalPlayer() );
@@ -85,9 +77,7 @@ function GM:DrawPlayerNames()
 		if not IsValid(ply) or ply == LocalPlayer() or ply:Team() > 1000 then continue end;
 		local namePosition = ply:GetShootPos():ToScreen();
 		local nameToDisplay = ply:Alive() and ply:Name() or "*DEAD* "..ply:Name();
-		local colorToDisplay = ply:Alive() and Color( 255, 255, 255, 255 ) or Color( 100, 100, 100, 255 );
-		local playerColor = ply:GetNWString( "PlayerColor" );
-		if playerColor and ply:Alive() then colorToDisplay = Vector( playerColor ):ToColor() end;
+		local colorToDisplay = ply:Alive() and ply:rj_GetPlayerColor() or Color( 100, 100, 100, 255 );
 
 		draw.SimpleText( nameToDisplay, "TargetID", namePosition.x, namePosition.y - 24, colorToDisplay, TEXT_ALIGN_CENTER, TEXT_ALIGN_BOTTOM );
 		if GAMEMODE.TeamplayEnabled and ply:Team() == LocalPlayer():Team() then

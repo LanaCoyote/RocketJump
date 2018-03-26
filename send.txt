@@ -3,6 +3,7 @@ gamemodes\rocketjump\gamemode\cl_hud.lua
 gamemodes\rocketjump\gamemode\cl_init.lua
 gamemodes\rocketjump\gamemode\cl_menus.lua
 gamemodes\rocketjump\gamemode\cl_scoreboard.lua
+gamemodes\rocketjump\gamemode\player.lua
 gamemodes\rocketjump\gamemode\shared.lua
 gamemodes\rocketjump\entities\entities\item_healthkit.lua
 gamemodes\rocketjump\entities\entities\item_rpg_round.lua
