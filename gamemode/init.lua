@@ -58,6 +58,9 @@ function GM:PlayerLoadout( ply )
 	table.insert( GAMEMODE.SpawnProtectedPlayers, ply );
 	ply:SetRenderFX( kRenderFxStrobeFast );
 
+	-- breaks goomba stomping :/
+	-- if GAMEMODE.TeamplayEnabled then ply:SetNoCollideWithTeammates( true ) end;
+
 	ply:CrosshairDisable();
 	ply:Give( "weapon_rocketlauncher" );
 	ply:SetAmmo( 9999, "pistol" );
@@ -77,7 +80,9 @@ function GM:EntityTakeDamage( ent, cTakeDamageInfo )
 			ent:SetArmor( 0 );
 		end
 		return true
-	elseif cTakeDamageInfo:GetAttacker():IsValid() and cTakeDamageInfo:GetAttacker():IsPlayer() then
+	elseif cTakeDamageInfo:GetAttacker():IsValid() and cTakeDamageInfo:GetAttacker():IsPlayer() and ent:IsPlayer() then
+		if GAMEMODE.TeamplayEnabled and cTakeDamageInfo:GetAttacker():Team() == ent:Team() then return true end;
+
 		ent.LastAttackingPlayer = cTakeDamageInfo:GetAttacker();
 
 		if ent.DirectHit and ent:Health() > cTakeDamageInfo:GetDamage() then 
@@ -243,7 +248,14 @@ end
 
 function GM:PlayerInitialSpawn( pl )
 	if pl:IsBot() then
-		pl:SetTeam( TEAM_DEATHMATCH or TEAM_RED );
+		if GAMEMODE.TeamplayEnabled then
+			local teamToChoose = team.NumPlayers( TEAM_RED ) > team.NumPlayers( TEAM_BLUE )
+				and TEAM_BLUE or TEAM_RED;
+			pl:SetTeam( teamToChoose );
+		else
+			pl:SetTeam( TEAM_DEATHMATCH );
+		end
+
 		pl:rj_SetPlayerColorVector( Vector( math.random(), math.random(), math.random() ) );
 	return end
 
@@ -255,6 +267,12 @@ function GM:OnPlayerHitGround( ply, inWater, onFloater, speed )
 	if not inWater then
 		local groundEnt = ply:GetGroundEntity();
 		if IsValid( groundEnt ) and groundEnt:IsPlayer() then
+			-- print("goomba");
+			if GAMEMODE.TeamplayEnabled and ply:Team() == groundEnt:Team() then 
+				print("goomba'd teammate")
+				return 
+				end;
+
 			-- landed on player, goomba stomp!
 			local stompSpeed = math.max( speed, 300 );
 			ply:SetVelocity( Vector( 0, 0, stompSpeed ) );

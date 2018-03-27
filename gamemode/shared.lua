@@ -4,7 +4,7 @@ GM.Email		= "";
 GM.Website		= "lanan.ac";
 
 GM.TeamBased		= true;
-GM.TeamplayEnabled 	= false;
+GM.TeamplayEnabled 	= GetConVar( "mp_teamplay" ):GetBool();
 
 function GM:StartCommand( ply, cmd )
 	if ply:Team() != TEAM_SPECTATOR then

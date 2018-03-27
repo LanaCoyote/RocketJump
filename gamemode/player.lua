@@ -14,11 +14,20 @@ if CLIENT then
 end
 
 function PlayerMeta:rj_GetPlayerColorVector()
+	if GAMEMODE.TeamplayEnabled then
+		local teamColor = team.GetColor( self:Team() );
+		return Vector( teamColor.r / 255, teamColor.g / 255, teamColor.b / 255 );
+	end
+
 	local playerColor = self:GetNWString( "PlayerColor" );
 	return playerColor and Vector( playerColor ) or Vector( 1, 1, 0 );
 end
 
 function PlayerMeta:rj_GetPlayerColor()
+	if GAMEMODE.TeamplayEnabled then
+		return team.GetColor( self:Team() );
+	end
+
 	return self:rj_GetPlayerColorVector():ToColor();
 end
 

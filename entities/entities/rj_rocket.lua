@@ -138,6 +138,8 @@ function ENT:Explode( pos, normal, world )
 			-- end
 
 			if IsValid( phys ) then
+				if GAMEMODE.TeamplayEnabled and ent:IsPlayer() and self:GetOwner() != ent and self:GetOwner():Team() == ent:Team() then continue end;
+
 				local entPosition = ent:IsPlayer() and ent:GetPos() + ent:GetViewOffset() or ent:GetPos();
 				local force = scaleFactor * self.ExplosionForce;
 				local direction = (pos - entPosition):GetNormalized();
