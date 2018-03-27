@@ -3,7 +3,7 @@ EFFECT.MaxLife = 0.18;
 
 local smokeSprite = "particle/smokesprites_000";
 local maxSmokeSprite = 8;
-local smokeSpriteCount = 30;
+local smokeSpriteCount = 24;
 local fireballSprite = "effects/fire_cloud";
 local fireballMaterials = {
 	Material( "effects/fire_cloud1" ),
@@ -19,8 +19,9 @@ function EFFECT:Init( cEffectData )
 	self.Origin = cEffectData:GetOrigin();
 	self.Color = cEffectData:GetStart():ToColor();
 	self.Normal = cEffectData:GetNormal();
-	local rotatedNormal = self.Normal:Angle();
-	rotatedNormal:RotateAroundAxis( Vector( 0, 1, 0 ), 90 );
+
+	-- local rotatedNormal = self.Normal;
+	-- rotatedNormal:Rotate( Angle( 90, 0, 0 ) );
 
 	debugoverlay.Line( self.Origin, self.Origin + self.Normal * 40 );
 
@@ -34,16 +35,21 @@ function EFFECT:Init( cEffectData )
 		self.NextSpriteTime = CurTime() + 0.02;
 	--end
 
-	for i = 0, smokeSpriteCount do
-		local period = 1 / (smokeSpriteCount - 6) * 2 * math.pi;
+	local period = 1 / (smokeSpriteCount - 6) * 2 * math.pi;
+	local size = 96;
 
-		local size = 96;
+	for i = 0, smokeSpriteCount do
+		
 		local xAdjust = i < smokeSpriteCount - 6 and size * math.cos( i / period ) or 0;
 		local yAdjust = i < smokeSpriteCount - 6 and size/2 * math.sin( i / period ) or 0;
 		local zAdjust = i < smokeSpriteCount - 6 and 0 or size;
 
-		local adj = Vector( size/2 - math.random() * size + xAdjust, size/2 - math.random() * size + yAdjust, math.random() * size/2 + zAdjust );
-		adj:Rotate( rotatedNormal );
+		local adj = Vector( 
+			math.random() * size/2 + zAdjust ,
+			size/2 - math.random() * size + yAdjust, 
+			size/2 - math.random() * size + xAdjust
+		);
+		adj:Rotate( self.Normal:Angle() );
 		local spriteNum = math.Rand( 1, maxSmokeSprite );
 		local smoke = self.Emitter:Add( smokeSprite..spriteNum, self.Origin + adj );
 		if smoke then
