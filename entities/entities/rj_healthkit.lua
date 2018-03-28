@@ -21,5 +21,5 @@ function ENT:CanBePickedUp( ply )
 end
 
 function ENT:OnPickup( ply )
-	ply:SetHealth( math.Min( other:Health() + self.Healing, other:GetMaxHealth() ) );
+	ply:SetHealth( math.Min( ply:Health() + self.Healing, ply:GetMaxHealth() ) );
 end

@@ -49,7 +49,7 @@ function ENT:Touch( other )
 		if SERVER then
 			self:OnPickup( other );
 
-			if IsValid( self:GetOwner() ) and self.AlertOwnerOnPickup then
+			if IsValid( self:GetOwner() ) then
 				self:GetOwner():ItemTaken();
 			end
 		end

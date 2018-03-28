@@ -20,23 +20,23 @@ function ENT:GetRespawnTimerName()
 end
 
 if SERVER then
-	-- function ENT:Think()
-	-- 	if self:GetNWBool( "ItemExists" ) and not IsValid( self.Item ) then
-	-- 		print( "item spawner "..self:EntIndex().." item was taken" );
-	-- 		self:ItemTaken();
-	-- 	end
-	-- end
+	function ENT:Think()
+		if self:GetNWBool( "ItemExists" ) and not IsValid( self.Item ) then
+			print( "[warn] item spawner "..self:EntIndex().." item was taken without alerting the spawner" );
+			self:ItemTaken();
+		end
+	end
 
 	function ENT:SpawnItem()
 		if self:GetNWBool( "ItemExists" ) then return end;
 
 		if self.ItemClass == nil then
-			print( "item spawner "..self:EntIndex().." attempted to spawn nil item" );
+			print( "[err] item spawner "..self:EntIndex().." attempted to spawn nil item" );
 		return end
 
 		self.Item = ents.Create( self.ItemClass );
 		if not IsValid( self.Item ) then
-			print( "failed to spawn "..self.ItemClass.." from item spawner "..self:EntIndex() );
+			print( "[err] failed to spawn "..self.ItemClass.." from item spawner "..self:EntIndex() );
 		return end
 
 		self.Item:SetPos( self:GetPos() + Vector( 0, 0, self.HoverDistance ) );
