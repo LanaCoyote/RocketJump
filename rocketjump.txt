@@ -2,5 +2,6 @@
 {
 	"title"		"Rocket Jump"
 	"base"		"base"
+	"maps"		"^rj_"
 	"menusystem"	"1"
 }
