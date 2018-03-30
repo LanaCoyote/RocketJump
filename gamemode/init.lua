@@ -188,10 +188,13 @@ function GM:PlayerDeath( ply, inflictor, attacker )
 
 			MsgAll( attacker:Nick() .. " killed " .. ply:Nick() .. " using DIRECT_HIT!!!\n" );
 		else
+			local inflictorClass = inflictor:GetClass();
+			if inflictorClass == "weapon_rocketlauncher" then inflictorClass = "goomba_stomp" end;
+
 			net.Start( "PlayerKilledByPlayer" );
 
 				net.WriteEntity( ply );
-				net.WriteString( inflictor:GetClass() );
+				net.WriteString( inflictorClass );
 				net.WriteEntity( attacker );
 
 			net.Broadcast();
@@ -278,13 +281,16 @@ function GM:OnPlayerHitGround( ply, inWater, onFloater, speed )
 			ply:SetVelocity( Vector( 0, 0, stompSpeed ) );
 			if not groundEnt:OnGround() then groundEnt:SetVelocity( Vector( 0, 0, stompSpeed ) ) end;
 
+			local damage = math.ceil( stompSpeed / 12 );
+			local loudness = math.min( speed / 3, 400 );
+
 			local goombaStompDamage = DamageInfo();
-			goombaStompDamage:SetDamage( 25 );
+			goombaStompDamage:SetDamage( damage );
 			goombaStompDamage:SetDamageType( DMG_CLUB );
 			goombaStompDamage:SetInflictor( ply );
 			goombaStompDamage:SetAttacker( ply );
 			groundEnt:TakeDamageInfo( goombaStompDamage );
-			EmitSound( "Flesh.ImpactHard", ply:GetPos() + Vector( 0, 512, 0 ), ply:EntIndex() );
+			EmitSound( "Flesh.ImpactHard", ply:GetPos() + Vector( 0, 512, 0 ), ply:EntIndex(), CHAN_AUTO, 1, loudness );
 		end
 	end
 end

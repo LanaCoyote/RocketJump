@@ -5,8 +5,9 @@ if CLIENT then
    SWEP.PrintName       = "Rocket Launcher";
    SWEP.Slot            = 4;
 
-   killicon.AddFont( "DIRECT_HIT", "HL2MPTypeDeath", "!", Color( 255, 80, 0, 255 ) );
-   killicon.AddFont( "rj_rocket", "HL2MPTypeDeath", "3", Color( 255, 80, 0, 255 ) );
+   killicon.Add( "DIRECT_HIT", "HUD/killicons/direct", Color( 255, 80, 0, 255 ) );
+   killicon.Add( "rj_rocket", "HUD/killicons/rocket", Color( 255, 80, 0, 255 ) );
+   killicon.Add( "goomba_stomp", "HUD/killicons/goomba", Color( 255, 80, 0, 255 ) );
 end
 
 SWEP.Base               = "weapon_base";
